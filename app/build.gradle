@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.meredithbayne.toppopularmovies"
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,6 +20,13 @@ android {
                 proguardFile 'proguard-rules.pro'
             }
         }
+        // API key should be stored in ~/.gradle/gradle.properties
+        debug {
+            buildConfigField("String", "MOVIE_DB_API_KEY", "\"" + prop("movieDbApiKey") + "\"")
+        }
+    }
+    repositories {
+        mavenCentral()
     }
 }
 
@@ -30,4 +37,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+}
+
+def prop(String propName) {
+    if (hasProperty(propName)) {
+        def val = property(propName)
+        if (val != null) {
+            return val.toString()
+        }
+    }
+    return ''
 }
