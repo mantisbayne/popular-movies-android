@@ -13,9 +13,10 @@ import com.squareup.picasso.Picasso;
  * Created by meredithbayne on 11/21/17.
  */
 
-public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.ViewHolder>  {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>  {
 
     private Context mContext;
+
     // references to our images
     private Integer[] mThumbIds = {
             R.drawable.sample_2, R.drawable.sample_3,
@@ -31,19 +32,19 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
             R.drawable.sample_6, R.drawable.sample_7
     };
 
-    public MoviePosterAdapter(Context context) {
+    public MovieAdapter(Context context) {
         mContext = context;
     }
 
     @Override
-    public MoviePosterAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public MovieAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.movie_poster_list_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MoviePosterAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MovieAdapter.ViewHolder holder, int position) {
         Picasso.with(mContext).load(mThumbIds[position]).into(holder.mImageView);
     }
 
