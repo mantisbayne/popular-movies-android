@@ -7,30 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.meredithbayne.toppopularmovies.network.Movie;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * Created by meredithbayne on 11/21/17.
+ * Load movie data into the view
  */
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>  {
-
     private Context mContext;
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7
-    };
+    private List<Movie> mMovieData = Collections.emptyList();
 
     public MovieAdapter(Context context) {
         mContext = context;
@@ -45,25 +35,40 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(MovieAdapter.ViewHolder holder, int position) {
-        Picasso.with(mContext).load(mThumbIds[position]).into(holder.mImageView);
+        Movie movie = mMovieData.get(position);
+
+        Picasso.Builder builder = new Picasso.Builder(mContext);
+        builder.build().load(movie.getPosterPath())
+                .noFade()
+                .into(holder.mImageView, new Callback() {
+            @Override public void onSuccess() {
+
+            }
+            @Override public void onError() {}
+        });
     }
 
     @Override
     public int getItemCount() {
-        if (mThumbIds == null) {
+        if (mMovieData == null) {
             return 0;
         }
-        return mThumbIds.length;
+        return mMovieData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
 
             mImageView = itemView.findViewById(R.id.movie_poster);
         }
+    }
+
+    public void setMovieData(List<Movie> movieData) {
+        mMovieData = movieData;
+        notifyDataSetChanged();
     }
 }
 

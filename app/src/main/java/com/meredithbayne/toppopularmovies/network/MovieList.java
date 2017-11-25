@@ -1,12 +1,15 @@
-package com.meredithbayne.toppopularmovies.util;
+package com.meredithbayne.toppopularmovies.network;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
 /**
- * Created by meredithbayne on 11/24/17.
+ * Implementation list of movies object
  */
 
 public class MovieList {
+    @SerializedName("results")
     private ArrayList<Movie> movies = null;
 
     public ArrayList<Movie> getResults() {
