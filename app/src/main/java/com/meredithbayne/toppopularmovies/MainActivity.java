@@ -1,14 +1,19 @@
 package com.meredithbayne.toppopularmovies;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,6 +46,24 @@ public class MainActivity extends AppCompatActivity {
         mMovieRecyclerView.setAdapter(mMovieAdapter);
 
         loadMovieData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sort_movies, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemThatWasClickedId = item.getItemId();
+        if (itemThatWasClickedId == R.id.action_sort) {
+            Context context = MainActivity.this;
+            String textToShow = "Sort clicked";
+            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadMovieData() {

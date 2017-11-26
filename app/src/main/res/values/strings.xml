@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="sort_menu">Sort by</string>
     <string name="error_message">Sorry, there was an error.  Please restart the app to try again.</string>
+    <string name="popularity">Popularity</string>
+    <string name="rating">Rating</string>
 </resources>
