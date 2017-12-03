@@ -1,9 +1,7 @@
 package com.meredithbayne.toppopularmovies;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mMovieAdapter = new MovieAdapter(getApplicationContext());
         mMovieRecyclerView.setAdapter(mMovieAdapter);
 
-        loadMovieData();
+        loadMovieData(API.buildPopularMoviesUrl());
     }
 
     @Override
@@ -57,18 +54,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
-        if (itemThatWasClickedId == R.id.action_sort) {
-            Context context = MainActivity.this;
-            String textToShow = "Sort clicked";
-            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+
+        if (itemThatWasClickedId == R.id.sort_by_rating) {
+            loadMovieData(API.buildTopRatedMoviesUrl());
+            return true;
+        } else if (itemThatWasClickedId == R.id.sort_by_popularity) {
+            loadMovieData(API.buildPopularMoviesUrl());
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadMovieData() {
+    private void loadMovieData(URL url) {
         showMoviesDataView();
-        new MoviesTask().execute();
+        new MoviesTask(url).execute();
     }
 
     private void showMoviesDataView() {
@@ -77,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class MoviesTask extends AsyncTask<String, String, String> {
+        private URL url;
+
+        public MoviesTask(URL url) {
+           this.url = url;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -86,10 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            URL moviesUrl = API.buildPopularMoviesUrl();
-
             try {
-                String response = API.getResponseFromHttpUrl(moviesUrl);
+                String response = API.getResponseFromHttpUrl(url);
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();
