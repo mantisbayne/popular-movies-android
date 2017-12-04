@@ -119,6 +119,10 @@ public class Movie {
         return voteAverage;
     }
 
+    public String formatVoteAverage() {
+        return voteAverage.toString() + "/10";
+    }
+
     public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
     }

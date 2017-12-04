@@ -1,5 +1,7 @@
 package com.meredithbayne.toppopularmovies;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,11 +17,22 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.meredithbayne.toppopularmovies.network.API;
+import com.meredithbayne.toppopularmovies.network.Movie;
 import com.meredithbayne.toppopularmovies.network.MovieList;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickListener {
+    public static final String EXTRA_POSTER = "poster";
+    public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_RELEASE_DATE = "releaseDate";
+    public static final String EXTRA_RATING = "rating";
+    public static final String EXTRA_OVERVIEW = "overview";
+
+    private static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
+
     private TextView mErrorMessage;
     private ProgressBar mLoading;
     private RecyclerView mMovieRecyclerView;
@@ -39,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mMovieRecyclerView.setLayoutManager(layoutManager);
         mMovieRecyclerView.setHasFixedSize(true);
 
-        mMovieAdapter = new MovieAdapter(getApplicationContext());
+        mMovieAdapter = new MovieAdapter(this);
         mMovieRecyclerView.setAdapter(mMovieAdapter);
 
         loadMovieData(API.buildPopularMoviesUrl());
@@ -113,5 +126,20 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onMovieItemClick(View view, int position) {
+        Context context = getBaseContext();
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+
+        Movie movie = mMovieAdapter.getItem(position);
+
+        intent.putExtra(EXTRA_TITLE, movie.getOriginalTitle());
+        intent.putExtra(EXTRA_POSTER, movie.getPosterPath());
+        intent.putExtra(EXTRA_RELEASE_DATE, movie.formatDate(DISPLAY_DATE_FORMAT));
+        intent.putExtra(EXTRA_RATING, movie.formatVoteAverage());
+        intent.putExtra(EXTRA_OVERVIEW, movie.getOverview());
+        startActivity(intent);
     }
 }

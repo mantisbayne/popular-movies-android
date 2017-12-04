@@ -23,12 +23,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     private Context mContext;
     private List<Movie> mMovieData = Collections.emptyList();
 
-    public MovieAdapter(Context context) {
-        mContext = context;
+    private MovieAdapterClickListener mListener;
+
+
+    public interface MovieAdapterClickListener {
+        void onMovieItemClick(View view, int position);
+    }
+
+    public Movie getItem(int id) {
+        return mMovieData == null ? null : mMovieData.get(id);
+    }
+
+    MovieAdapter(MovieAdapterClickListener listener){
+        mListener = listener;
     }
 
     @Override
     public MovieAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        mContext = viewGroup.getContext();
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.movie_poster_list_item, viewGroup, false);
         return new ViewHolder(view);
@@ -42,11 +54,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         builder.build().load(movie.getPosterPath())
                 .noFade()
                 .into(holder.mImageView, new Callback() {
-            @Override public void onSuccess() {
+                    @Override public void onSuccess() {
 
-            }
-            @Override public void onError() {}
-        });
+                    }
+                    @Override public void onError() {}
+                });
     }
 
     @Override
@@ -60,19 +72,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
 
-        private ViewHolder(View itemView) {
+        private ViewHolder(final View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mImageView = itemView.findViewById(R.id.movie_poster);
+
+            mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
-                    context.startActivity(intent);
+                    mListener.onMovieItemClick(itemView, getAdapterPosition());
                 }
             });
-
-            mImageView = itemView.findViewById(R.id.movie_poster);
         }
     }
 
