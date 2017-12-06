@@ -1,7 +1,6 @@
 package com.meredithbayne.toppopularmovies;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
 
     public interface MovieAdapterClickListener {
-        void onMovieItemClick(View view, int position);
+        void onMovieItemClick(int position);
     }
 
     public Movie getItem(int id) {
@@ -80,7 +79,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onMovieItemClick(itemView, getAdapterPosition());
+                    mListener.onMovieItemClick(getAdapterPosition());
                 }
             });
         }

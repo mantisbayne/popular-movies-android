@@ -22,7 +22,6 @@ import com.meredithbayne.toppopularmovies.network.MovieList;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickListener {
     public static final String EXTRA_POSTER = "poster";
@@ -104,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         protected String doInBackground(String... params) {
             try {
-                String response = API.getResponseFromHttpUrl(url);
-                return response;
+                return API.getResponseFromHttpUrl(url);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -129,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onMovieItemClick(View view, int position) {
+    public void onMovieItemClick(int position) {
         Context context = getBaseContext();
         Intent intent = new Intent(context, MovieDetailsActivity.class);
 
