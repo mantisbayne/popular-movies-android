@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.meredithbayne.toppopularmovies.network.Movie;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Load movie data into the view
@@ -52,12 +54,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Picasso.Builder builder = new Picasso.Builder(mContext);
         builder.build().load(movie.getPosterPath())
                 .noFade()
-                .into(holder.mImageView, new Callback() {
-                    @Override public void onSuccess() {
-
-                    }
-                    @Override public void onError() {}
-                });
+                .placeholder(R.drawable.ic_movie_black_24px)
+                .error(R.drawable.ic_error_outline_black_24px)
+                .into(holder.mImageView);
     }
 
     @Override
@@ -69,12 +68,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mImageView;
+        @BindView(R.id.movie_poster)
+        ImageView mImageView;
 
         private ViewHolder(final View itemView) {
             super(itemView);
-
-            mImageView = itemView.findViewById(R.id.movie_poster);
+            ButterKnife.bind(this, itemView);
 
             mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

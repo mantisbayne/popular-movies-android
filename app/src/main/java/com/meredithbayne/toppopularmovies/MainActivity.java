@@ -23,6 +23,9 @@ import com.meredithbayne.toppopularmovies.network.MovieList;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickListener {
     public static final String EXTRA_POSTER = "poster";
     public static final String EXTRA_TITLE = "title";
@@ -32,19 +35,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
 
-    private TextView mErrorMessage;
-    private ProgressBar mLoading;
-    private RecyclerView mMovieRecyclerView;
+    @BindView(R.id.movies_error)
+    TextView mErrorMessage;
+    @BindView(R.id.loading_indicator)
+    ProgressBar mLoading;
+    @BindView(R.id.recyclerview_movies) RecyclerView mMovieRecyclerView;
     private MovieAdapter mMovieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mMovieRecyclerView = findViewById(R.id.recyclerview_movies);
-        mErrorMessage = findViewById(R.id.movies_error);
-        mLoading = findViewById(R.id.loading_indicator);
+        ButterKnife.bind(this);
 
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
