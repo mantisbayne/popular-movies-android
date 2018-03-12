@@ -15,7 +15,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    MovieDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    MovieDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
