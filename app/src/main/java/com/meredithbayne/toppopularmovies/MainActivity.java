@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public class MoviesTask extends AsyncTask<String, String, String> {
         private URL url;
 
-        public MoviesTask(URL url) {
+        MoviesTask(URL url) {
            this.url = url;
         }
 
