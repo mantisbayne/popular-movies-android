@@ -65,9 +65,12 @@ public class MovieContentProvider extends ContentProvider {
                         sortOrder);
                 break;
 
-            case MOVIE_WITH_ID:
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
 
         }
+
+        return returnCursor;
     }
 
     @Nullable
@@ -116,7 +119,7 @@ public class MovieContentProvider extends ContentProvider {
             case MOVIE_WITH_ID:
                 String tId = uri.getPathSegments().get(1);
 
-                moviesDeleted = database.delete(TABLE_NAME, "_id=?", new String[]{id});
+                moviesDeleted = database.delete(TABLE_NAME, "_id=?", new String[]{tId});
                 break;
              default:
                  throw new UnsupportedOperationException("Unknown uri: " + uri);

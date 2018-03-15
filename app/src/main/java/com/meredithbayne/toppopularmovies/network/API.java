@@ -1,6 +1,7 @@
 package com.meredithbayne.toppopularmovies.network;
 
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.meredithbayne.toppopularmovies.BuildConfig;
@@ -19,46 +20,70 @@ import java.util.Scanner;
 public final class API {
     private static final String TAG = API.class.getSimpleName();
 
-    private static final String POPULAR_MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie/popular";
-    private static final String TOP_RATED_MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie/top_rated";
+    private static final String MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie";
+
+    // Path
+    private static final String TRAILERS_PATH = "videos";
+    private static final String REVIEWS_PATH = "reviews";
 
     // Query parameters
     private static final String API_KEY_PARAM = "api_key";
 
     // Get URL for popular movies list request
-    public static URL buildPopularMoviesUrl() {
-        Uri uri = Uri.parse(POPULAR_MOVIES_BASE_URL).buildUpon()
+    @Nullable
+    public static URL buildMoviesUrl(String sortByPath) {
+        Uri uri = Uri.parse(MOVIES_BASE_URL).buildUpon()
+                    .appendPath(sortByPath)
                     .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIE_DB_API_KEY)
                     .build();
-        URL popularUrl = null;
+        URL moviesUrl;
 
         try {
-            popularUrl = new URL(uri.toString());
+            moviesUrl = new URL(uri.toString());
+            Log.v(TAG, "Built URI " + moviesUrl);
+            return moviesUrl;
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return null;
         }
-
-        Log.v(TAG, "Built URI " + popularUrl);
-
-        return popularUrl;
     }
 
-    // Get URL for top rated movies list request
-    public static URL buildTopRatedMoviesUrl() {
-        Uri uri = Uri.parse(TOP_RATED_MOVIES_BASE_URL).buildUpon()
-                    .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIE_DB_API_KEY)
-                    .build();
-        URL topRatedUrl = null;
+    @Nullable
+    public static String getTrailersResponse(String movieId) throws IOException {
+        Uri uri = Uri.parse(MOVIES_BASE_URL).buildUpon()
+                .appendPath(movieId)
+                .appendPath(TRAILERS_PATH)
+                .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIE_DB_API_KEY)
+                .build();
+        URL trailersUrl;
 
         try {
-            topRatedUrl = new URL(uri.toString());
+            trailersUrl = new URL(uri.toString());
+            Log.v(TAG, "Built URI " + trailersUrl);
+            return getResponseFromHttpUrl(trailersUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return null;
         }
+    }
 
-        Log.v(TAG, "Built URI " + topRatedUrl);
+    @Nullable
+    public static String getReviewsResponse(String movieId) throws IOException {
+        Uri uri = Uri.parse(MOVIES_BASE_URL).buildUpon()
+                .appendPath(movieId)
+                .appendPath(REVIEWS_PATH)
+                .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIE_DB_API_KEY)
+                .build();
+        URL trailersUrl;
 
-        return topRatedUrl;
+        try {
+            trailersUrl = new URL(uri.toString());
+            Log.v(TAG, "Built URI " + trailersUrl);
+            return getResponseFromHttpUrl(trailersUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // Get the response from the movie database server

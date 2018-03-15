@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mMovieRecyclerView.setAdapter(mMovieAdapter);
 
-        loadMovieData(API.buildPopularMoviesUrl());
+        String sortOrder = "popular";
+        loadMovieData(API.buildMoviesUrl(sortOrder));
     }
 
     @Override
@@ -70,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int itemThatWasClickedId = item.getItemId();
 
         if (itemThatWasClickedId == R.id.sort_by_rating) {
-            loadMovieData(API.buildTopRatedMoviesUrl());
+            loadMovieData(API.buildMoviesUrl("top_rated"));
             return true;
         } else if (itemThatWasClickedId == R.id.sort_by_popularity) {
-            loadMovieData(API.buildPopularMoviesUrl());
+            loadMovieData(API.buildMoviesUrl("popular"));
             return true;
         }
         return super.onOptionsItemSelected(item);
