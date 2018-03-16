@@ -1,4 +1,4 @@
-package com.meredithbayne.toppopularmovies.network;
+package com.meredithbayne.toppopularmovies.model;
 
 import com.google.gson.annotations.SerializedName;
 
