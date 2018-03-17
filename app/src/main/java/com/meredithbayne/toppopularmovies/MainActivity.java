@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     TextView mErrorMessage;
     @BindView(R.id.loading_indicator)
     ProgressBar mLoading;
-    @BindView(R.id.recyclerview_movies) RecyclerView mMovieRecyclerView;
+    @BindView(R.id.movies_list) RecyclerView mMovieRecyclerView;
     private MovieAdapter mMovieAdapter;
 
     @Override
