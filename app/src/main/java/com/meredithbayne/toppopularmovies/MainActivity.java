@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.meredithbayne.toppopularmovies.network.API;
+import com.meredithbayne.toppopularmovies.api.API;
 import com.meredithbayne.toppopularmovies.model.Movie;
 import com.meredithbayne.toppopularmovies.model.MovieList;
 

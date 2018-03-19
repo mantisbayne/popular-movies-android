@@ -1,4 +1,4 @@
-package com.meredithbayne.toppopularmovies.network;
+package com.meredithbayne.toppopularmovies.api;
 
 import android.net.Uri;
 import android.support.annotation.Nullable;
