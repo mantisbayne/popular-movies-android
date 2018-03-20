@@ -1,8 +1,20 @@
 package com.meredithbayne.toppopularmovies.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 /**
- * Created by mbayne on 3/16/18.
+ * Data model for list of trailers returned
  */
 
 public class TrailerList {
+    @SerializedName("results")
+    @Expose
+    private List<Trailer> trailers = null;
+
+    public List<Trailer> getTrailers() {
+        return trailers;
+    }
 }
