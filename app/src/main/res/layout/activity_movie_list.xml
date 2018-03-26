@@ -17,6 +17,21 @@
         android:textSize="@dimen/subhead_text"
         android:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/favorites_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:text="@string/no_favorites"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:drawableTop="@drawable/ic_favorite_border_black_24px"
+        android:drawablePadding="@dimen/medium_margin"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
     <ProgressBar
         android:id="@+id/loading_indicator"
         android:layout_height="@dimen/large_margin"

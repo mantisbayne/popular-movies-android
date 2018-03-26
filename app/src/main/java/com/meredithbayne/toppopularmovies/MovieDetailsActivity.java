@@ -24,7 +24,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     ImageView mPoster;
     @BindView(R.id.favorite_movie_icon)
     ImageView mFavoriteIcon;
-    boolean isFavorited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +50,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        if (!isFavorited) {
-            mFavoriteIcon.setImageResource(R.drawable.ic_favorite_black_24px);
-            isFavorited = true;
-        } else {
-            mFavoriteIcon.setImageResource(R.drawable.ic_favorite_border_black_24px);
-        }
+
     }
 }

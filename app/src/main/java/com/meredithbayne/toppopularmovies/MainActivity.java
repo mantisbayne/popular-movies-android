@@ -41,11 +41,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     ProgressBar mLoading;
     @BindView(R.id.movies_list) RecyclerView mMovieRecyclerView;
     private MovieAdapter mMovieAdapter;
+    @BindView(R.id.favorites_empty)
+    private TextView mFavoritesEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
 
         LinearLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -76,8 +78,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         } else if (itemThatWasClickedId == R.id.sort_by_popularity) {
             loadMovieData(API.buildMoviesUrl("popular"));
             return true;
+        } else if (itemThatWasClickedId == R.id.show_favorites) {
+            showFavorites();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFavorites() {
+        showEmptyFavoritesView();
+    }
+
+    private void showEmptyFavoritesView() {
+
     }
 
     private void loadMovieData(URL url) {

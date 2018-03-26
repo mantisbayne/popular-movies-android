@@ -27,6 +27,8 @@ public class Movie {
     @SerializedName("vote_average")
     private Double voteAverage;
 
+    private boolean isFavorite;
+
     /**
      * Implementation of a Movie object
      * @param releaseDate - date film was released to public

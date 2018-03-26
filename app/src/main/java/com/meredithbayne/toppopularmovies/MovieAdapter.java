@@ -1,6 +1,7 @@
 package com.meredithbayne.toppopularmovies;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,6 @@ import butterknife.ButterKnife;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>  {
     private Context mContext;
     private List<Movie> mMovieData = Collections.emptyList();
-
     private MovieAdapterClickListener mListener;
 
 
