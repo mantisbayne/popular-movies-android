@@ -12,6 +12,9 @@ import java.util.Date;
 public class Movie {
     private static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
+    @SerializedName("id")
+    private int id;
+
     @SerializedName("original_title")
     private String originalTitle;
 
@@ -27,8 +30,6 @@ public class Movie {
     @SerializedName("vote_average")
     private Double voteAverage;
 
-    private boolean isFavorite;
-
     /**
      * Implementation of a Movie object
      * @param releaseDate - date film was released to public
@@ -37,10 +38,11 @@ public class Movie {
      * @param voteAverage - rating based on user votes
      * @param overview - plot summary for the film
      */
-    public Movie(String originalTitle, String overview,
+    public Movie(int id, String originalTitle, String overview,
                    String posterPath, Date releaseDate, Double voteAverage) {
         super();
 
+        this.id = id;
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.posterPath = posterPath;
@@ -66,5 +68,17 @@ public class Movie {
 
     public String formatVoteAverage() {
         return voteAverage.toString() + "/10";
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 }

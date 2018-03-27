@@ -1,17 +1,21 @@
 package com.meredithbayne.toppopularmovies;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.meredithbayne.toppopularmovies.data.MovieContract;
+import com.meredithbayne.toppopularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MovieDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.movie_details_title)
     TextView mTitle;
     @BindView(R.id.movie_details_release_date)
@@ -25,6 +29,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     @BindView(R.id.favorite_movie_icon)
     ImageView mFavoriteIcon;
 
+    private Movie movie;
+    private boolean isFavorite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +44,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         mOverview.setText(getIntent().getStringExtra(MainActivity.EXTRA_OVERVIEW));
 
         mFavoriteIcon.findViewById(R.id.favorite_movie_icon);
-        mFavoriteIcon.setOnClickListener(this);
+        mFavoriteIcon.setOnClickListener(view -> {
+            updateFavorites();
+        });
         mFavoriteIcon.setImageResource(R.drawable.ic_favorite_border_black_24px);
 
         Picasso.Builder builder = new Picasso.Builder(getApplicationContext());
@@ -48,8 +57,30 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
                 .into(mPoster);
     }
 
-    @Override
-    public void onClick(View v) {
+    private void updateFavorites() {
+        if (isFavorite) {
+            deleteFromFavorites(movie.getId());
+            isFavorite = false;
+            updateFavoriteUi();
+        } else {
+            addToFavorites(movie.getId(), movie.getOriginalTitle(), movie.getPosterPath(),
+                    movie.getVoteAverage(), movie.getReleaseDate(), movie.getOverview());
+        }
+    }
 
+    private void addToFavorites(int id, String originalTitle, String posterPath, Double voteAverage,
+                                Date releaseDate, String overview) {
+
+    }
+
+    private void updateFavoriteUi() {
+
+    }
+
+    private void deleteFromFavorites(int id) {
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(String.valueOf(id)).build();
+        getContentResolver().delete(uri, null, null);
+        getContentResolver().notifyChange(uri, null);
     }
 }

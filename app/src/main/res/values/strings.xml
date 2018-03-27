@@ -8,13 +8,15 @@
     <string name="release_date">Release date :</string>
     <string name="user_rating">User rating :</string>
     <string name="favorite">Favorite :</string>
+    <string name="reviews">Reviews : </string>
+    <string name="trailers">Trailers :</string>
+
+    <!--No Favorites View-->
+    <string name="no_favorites">No Favorites</string>
 
     <!--Accesibility-->
     <string name="favorite_movie">Favorite Movie</string>
     <string name="movie_poster">Movie Poster</string>
-    <string name="trailers">Trailers :</string>
     <string name="favorites">Favorites</string>
-    <string name="no_favorites">No Favorites</string>
-    <string name="reviews">Reviews</string>
 
 </resources>

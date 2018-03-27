@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public static final String EXTRA_RELEASE_DATE = "releaseDate";
     public static final String EXTRA_RATING = "rating";
     public static final String EXTRA_OVERVIEW = "overview";
+    private boolean isNoFavoritesVisible = false;
 
     private static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
 
@@ -40,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @BindView(R.id.loading_indicator)
     ProgressBar mLoading;
     @BindView(R.id.movies_list) RecyclerView mMovieRecyclerView;
-    private MovieAdapter mMovieAdapter;
+    MovieAdapter mMovieAdapter;
     @BindView(R.id.favorites_empty)
-    private TextView mFavoritesEmpty;
+    TextView mFavoritesEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +73,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
 
+        // TODO refactor this
         if (itemThatWasClickedId == R.id.sort_by_rating) {
+            if (isNoFavoritesVisible)
+                mFavoritesEmpty.setVisibility(View.INVISIBLE);
             loadMovieData(API.buildMoviesUrl("top_rated"));
             return true;
         } else if (itemThatWasClickedId == R.id.sort_by_popularity) {
+            if (isNoFavoritesVisible)
+                mFavoritesEmpty.setVisibility(View.INVISIBLE);
             loadMovieData(API.buildMoviesUrl("popular"));
             return true;
         } else if (itemThatWasClickedId == R.id.show_favorites) {
@@ -90,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void showEmptyFavoritesView() {
-
+        mFavoritesEmpty.setVisibility(View.VISIBLE);
+        mMovieRecyclerView.setVisibility(View.INVISIBLE);
+        isNoFavoritesVisible = true;
     }
 
     private void loadMovieData(URL url) {
