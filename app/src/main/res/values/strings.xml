@@ -18,5 +18,7 @@
     <string name="favorite_movie">Favorite Movie</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="favorites">Favorites</string>
+    <string name="removed_from_favorites">has been removed from your favorites</string>
+    <string name="added_to_favorites">Added to favorites!</string>
 
 </resources>

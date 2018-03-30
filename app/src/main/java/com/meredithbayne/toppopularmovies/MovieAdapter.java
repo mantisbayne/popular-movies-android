@@ -1,7 +1,6 @@
 package com.meredithbayne.toppopularmovies;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,8 +53,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Picasso.Builder builder = new Picasso.Builder(mContext);
         builder.build().load(movie.getPosterPath())
                 .noFade()
-                .placeholder(R.drawable.ic_movie_black_24px)
-                .error(R.drawable.ic_error_outline_black_24px)
+                .placeholder(R.drawable.ic_movie_black)
+                .error(R.drawable.ic_error_outline_black)
                 .into(holder.mImageView);
     }
 

@@ -1,5 +1,8 @@
 package com.meredithbayne.toppopularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.text.DateFormat;
@@ -9,7 +12,7 @@ import java.util.Date;
  * Movie object representation of response from server
  */
 
-public class Movie {
+public class Movie implements Parcelable {
     private static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
     @SerializedName("id")
@@ -50,6 +53,28 @@ public class Movie {
         this.voteAverage = voteAverage;
     }
 
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        originalTitle = in.readString();
+        overview = in.readString();
+        posterPath = in.readString();
+        long tmpDate = in.readLong();
+        releaseDate = tmpDate == -1 ? null : new Date(tmpDate);
+        voteAverage = in.readDouble();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     public String getOriginalTitle() {
         return originalTitle;
     }
@@ -80,5 +105,20 @@ public class Movie {
 
     public Double getVoteAverage() {
         return voteAverage;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(originalTitle);
+        dest.writeString(overview);
+        dest.writeString(posterPath);
+        dest.writeLong(releaseDate != null ? releaseDate.getTime() : -1);
+        dest.writeDouble(voteAverage);
     }
 }

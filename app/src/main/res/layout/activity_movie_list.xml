@@ -27,7 +27,7 @@
         android:layout_marginTop="@dimen/medium_margin"
         android:text="@string/no_favorites"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:drawableTop="@drawable/ic_favorite_border_black_24px"
+        android:drawableTop="@drawable/ic_favorite_border_black"
         android:drawablePadding="@dimen/medium_margin"
         android:layout_centerInParent="true"
         android:visibility="invisible" />

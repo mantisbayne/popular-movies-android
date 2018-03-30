@@ -133,7 +133,8 @@
                 android:layout_marginStart="@dimen/large_margin"
                 android:layout_marginTop="@dimen/small_margin"
                 android:contentDescription="@string/favorite_movie"
-                app:srcCompat="@drawable/ic_favorite_border_black_24px" />
+                app:srcCompat="@drawable/ic_favorite_border_black"
+                android:onClick="onClickFavoriteIcon"/>
         </RelativeLayout>
 
         <RelativeLayout

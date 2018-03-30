@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,19 +24,24 @@ import com.meredithbayne.toppopularmovies.model.MovieList;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickListener {
+public class MainActivity extends AppCompatActivity
+        implements MovieAdapter.MovieAdapterClickListener {
     public static final String EXTRA_POSTER = "poster";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_RELEASE_DATE = "releaseDate";
     public static final String EXTRA_RATING = "rating";
     public static final String EXTRA_OVERVIEW = "overview";
+    public static final String EXTRA_MOVIE = "movie";
     private boolean isNoFavoritesVisible = false;
 
-    private static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
+    // Set to US for now
+    public static final SimpleDateFormat DISPLAY_DATE_FORMAT =
+            new SimpleDateFormat("MM/dd/yy", Locale.US);
 
     @BindView(R.id.movies_error)
     TextView mErrorMessage;
@@ -73,11 +80,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
 
-        // TODO refactor this
         if (itemThatWasClickedId == R.id.sort_by_rating) {
             if (isNoFavoritesVisible)
                 mFavoritesEmpty.setVisibility(View.INVISIBLE);
             loadMovieData(API.buildMoviesUrl("top_rated"));
+            item.setChecked(true);
             return true;
         } else if (itemThatWasClickedId == R.id.sort_by_popularity) {
             if (isNoFavoritesVisible)
@@ -157,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         Movie movie = mMovieAdapter.getItem(position);
 
+        intent.putExtra(EXTRA_MOVIE, movie);
         intent.putExtra(EXTRA_TITLE, movie.getOriginalTitle());
         intent.putExtra(EXTRA_POSTER, movie.getPosterPath());
         intent.putExtra(EXTRA_RELEASE_DATE, movie.formatDate(DISPLAY_DATE_FORMAT));
