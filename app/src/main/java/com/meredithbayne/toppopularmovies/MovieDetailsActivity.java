@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     ImageView mPoster;
     @BindView(R.id.favorite_movie_icon)
     ImageView mFavoriteIcon;
+    @BindView(R.id.reviews_list) RecyclerView mReviewsList;
+    ReviewAdapter mReviewAdapter;
 
     private Movie movie;
     private boolean isFavorite;
@@ -46,6 +49,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mFavoriteIcon.findViewById(R.id.favorite_movie_icon);
         mFavoriteIcon.setImageResource(R.drawable.ic_favorite_border_black);
+
+        mReviewsList.setAdapter(mReviewAdapter);
 
         movie = getIntent().getParcelableExtra(MainActivity.EXTRA_MOVIE);
 

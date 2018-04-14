@@ -1,6 +1,7 @@
 package com.meredithbayne.toppopularmovies;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     @Override
-    public MovieAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    @NonNull
+    public MovieAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         mContext = viewGroup.getContext();
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.movie_poster_list_item, viewGroup, false);
@@ -47,7 +49,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MovieAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieAdapter.ViewHolder holder, int position) {
         Movie movie = mMovieData.get(position);
 
         Picasso.Builder builder = new Picasso.Builder(mContext);

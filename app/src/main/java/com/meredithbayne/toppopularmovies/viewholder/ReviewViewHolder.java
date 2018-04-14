@@ -12,13 +12,13 @@ import com.meredithbayne.toppopularmovies.R;
 
 public class ReviewViewHolder extends RecyclerView.ViewHolder {
     public TextView mAuthor;
-    public TextView mContent;
+    public TextView mDescription;
 
     public ReviewViewHolder(View itemView) {
         super(itemView);
 
-//        mTvReviewAuthor = itemView.findViewById(R.id.tvReviewAuthor);
-//        mTvReviewContent = itemView.findViewById(R.id.tvReviewContent);
+        mAuthor = itemView.findViewById(R.id.movie_review_author);
+        mDescription = itemView.findViewById(R.id.movie_review_description);
     }
 }
 

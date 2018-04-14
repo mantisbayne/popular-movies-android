@@ -5,9 +5,9 @@
     <string name="popularity">Popularity</string>
     <string name="rating">Rating</string>
     <string name="title_movie_detail">Movie Details</string>
-    <string name="release_date">Release date :</string>
-    <string name="user_rating">User rating :</string>
-    <string name="favorite">Favorite :</string>
+    <string name="release_date">Release date</string>
+    <string name="user_rating">User rating</string>
+    <string name="favorite">Favorite</string>
     <string name="reviews">Reviews : </string>
     <string name="trailers">Trailers :</string>
 
@@ -20,5 +20,6 @@
     <string name="favorites">Favorites</string>
     <string name="removed_from_favorites">has been removed from your favorites</string>
     <string name="added_to_favorites">Added to favorites!</string>
+    <string name="play_trailer_button">Play trailer button</string>
 
 </resources>
