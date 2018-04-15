@@ -1,6 +1,7 @@
 package com.meredithbayne.toppopularmovies;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.meredithbayne.toppopularmovies.view.ReviewAdapter;
 import com.meredithbayne.toppopularmovies.data.MovieContract;
 import com.meredithbayne.toppopularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
@@ -18,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MovieDetailsActivity extends AppCompatActivity {
+    private static final String STATE_IS_FAVORITED = "is_favorited";
     @BindView(R.id.movie_details_title)
     TextView mTitle;
     @BindView(R.id.movie_details_release_date)
@@ -48,13 +51,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mOverview.setText(getIntent().getStringExtra(MainActivity.EXTRA_OVERVIEW));
 
         mFavoriteIcon.findViewById(R.id.favorite_movie_icon);
-        mFavoriteIcon.setImageResource(R.drawable.ic_favorite_border_black);
 
         mReviewsList.setAdapter(mReviewAdapter);
 
         movie = getIntent().getParcelableExtra(MainActivity.EXTRA_MOVIE);
 
+        if (savedInstanceState != null)
+            isFavorite = savedInstanceState.getBoolean(STATE_IS_FAVORITED, isFavorite);
+        else
+            isFavorite = isFavoriteMovie();
+
         loadPoster();
+        if (movie != null)
+            updateViews();
+        else
+            showError();
     }
 
     private void loadPoster() {
@@ -64,6 +75,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_movie_black)
                 .error(R.drawable.ic_error_outline_black)
                 .into(mPoster);
+    }
+
+    private void updateViews() {
+        updateFavoriteUi();
+
+        displayReviews();
+        displayTrailers();
+    }
+
+    private void displayReviews() {
+
+    }
+
+    private void displayTrailers() {
+
     }
 
     public void onClickFavoriteIcon(View view) {
@@ -80,6 +106,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     movie.getOverview());
             isFavorite = true;
         }
+        onFavoritesUpdateComplete();
+    }
+
+    private void onFavoritesUpdateComplete() {
         updateFavoriteUi();
     }
 
@@ -99,6 +129,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         if (uri != null) {
             Toast.makeText(this, R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void updateFavoriteUi() {
@@ -118,5 +149,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // Notify the user
         Toast.makeText(this, movie.getOriginalTitle() + " " +
                 getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean isFavoriteMovie() {
+        final Cursor cursor;
+        cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null,
+                "movie_id=?", new String[]{String.valueOf(movie.getId())}, null);
+
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_IS_FAVORITED, isFavorite);
+    }
+
+    private void showError() {
+
     }
 }

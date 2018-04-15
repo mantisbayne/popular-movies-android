@@ -1,10 +1,12 @@
-package com.meredithbayne.toppopularmovies;
+package com.meredithbayne.toppopularmovies.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.meredithbayne.toppopularmovies.R;
 import com.meredithbayne.toppopularmovies.model.Review;
 import com.meredithbayne.toppopularmovies.model.ReviewList;
 import com.meredithbayne.toppopularmovies.viewholder.ReviewViewHolder;
@@ -17,6 +19,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
     }
 
     @Override
+    @NonNull
     public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.review_list_item, parent, false);
@@ -36,5 +39,4 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewViewHolder> {
     public int getItemCount() {
         return mReviewList.getReviews().size();
     }
-
 }

@@ -1,4 +1,4 @@
-package com.meredithbayne.toppopularmovies;
+package com.meredithbayne.toppopularmovies.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.meredithbayne.toppopularmovies.R;
 import com.meredithbayne.toppopularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +36,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return mMovieData == null ? null : mMovieData.get(id);
     }
 
-    MovieAdapter(MovieAdapterClickListener listener){
+    public MovieAdapter(MovieAdapterClickListener listener){
         mListener = listener;
     }
 
@@ -76,12 +77,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onMovieItemClick(getAdapterPosition());
-                }
-            });
+            mImageView.setOnClickListener(v -> mListener.onMovieItemClick(getAdapterPosition()));
         }
     }
 
