@@ -30,7 +30,7 @@
         android:drawableTop="@drawable/ic_favorite_border_black"
         android:drawablePadding="@dimen/medium_margin"
         android:layout_centerInParent="true"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/loading_indicator"

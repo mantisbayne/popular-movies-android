@@ -1,9 +1,15 @@
 package com.meredithbayne.toppopularmovies;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,10 +22,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.meredithbayne.toppopularmovies.view.MovieAdapter;
 import com.meredithbayne.toppopularmovies.api.API;
 import com.meredithbayne.toppopularmovies.model.Movie;
 import com.meredithbayne.toppopularmovies.model.MovieList;
+import com.meredithbayne.toppopularmovies.view.MovieAdapter;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -29,27 +35,34 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements MovieAdapter.MovieAdapterClickListener {
+        implements MovieAdapter.MovieAdapterClickListener, LoaderCallbacks<MovieList> {
+
+    private static final int MOVIE_LOADER_ID = 0;
+
     public static final String EXTRA_POSTER = "poster";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_RELEASE_DATE = "releaseDate";
     public static final String EXTRA_RATING = "rating";
     public static final String EXTRA_OVERVIEW = "overview";
     public static final String EXTRA_MOVIE = "movie";
-    private boolean isNoFavoritesVisible = false;
+    private static final String STATE_SORTED_BY = "sorted_by";
 
-    // Set to US for now
+    private static final String DATE_PATTERN = "MM/dd/yy";
+    private static final String RESPONSE_DATE_PATTERN = "MM/dd/yy";
+
+    // TODO improve this for internationalization / localization
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT =
-            new SimpleDateFormat("MM/dd/yy", Locale.US);
+            new SimpleDateFormat(DATE_PATTERN, Locale.US);
 
     @BindView(R.id.movies_error)
     TextView mErrorMessage;
+    @BindView(R.id.movies_list)
+    RecyclerView mMovieRecyclerView;
+    MovieAdapter mMovieAdapter;
     @BindView(R.id.loading_indicator)
     ProgressBar mLoading;
-    @BindView(R.id.movies_list) RecyclerView mMovieRecyclerView;
-    MovieAdapter mMovieAdapter;
-    @BindView(R.id.favorites_empty)
-    TextView mFavoritesEmpty;
+
+    private String sortedBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +78,16 @@ public class MainActivity extends AppCompatActivity
         mMovieAdapter = new MovieAdapter(this);
         mMovieRecyclerView.setAdapter(mMovieAdapter);
 
-        String sortOrder = "popular";
-        loadMovieData(API.buildMoviesUrl(sortOrder));
+        String sortedByDefault = getString(R.string.sort_by_popular);
+
+        if (savedInstanceState == null)
+            sortedBy = sortedByDefault;
+        else
+            sortedBy = savedInstanceState.getString(STATE_SORTED_BY, sortedByDefault);
+
+        LoaderCallbacks<MovieList> callback = MainActivity.this;
+
+        getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, callback);
     }
 
     @Override
@@ -77,39 +98,23 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClickedId = item.getItemId();
+        int itemId = item.getItemId();
 
-        if (itemThatWasClickedId == R.id.sort_by_rating) {
-            if (isNoFavoritesVisible)
-                mFavoritesEmpty.setVisibility(View.INVISIBLE);
-            loadMovieData(API.buildMoviesUrl("top_rated"));
-            item.setChecked(true);
+        if (itemId == R.id.sort_by_rating) {
+            sortedBy = getString(R.string.sort_by_rating);
+            invalidateData();
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
             return true;
-        } else if (itemThatWasClickedId == R.id.sort_by_popularity) {
-            if (isNoFavoritesVisible)
-                mFavoritesEmpty.setVisibility(View.INVISIBLE);
-            loadMovieData(API.buildMoviesUrl("popular"));
+        } else if (itemId == R.id.sort_by_popularity) {
+            sortedBy = getString(R.string.sort_by_popular);
+            invalidateData();
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
             return true;
-        } else if (itemThatWasClickedId == R.id.show_favorites) {
-            showFavorites();
+        } else if (itemId == R.id.show_favorites) {
+            // TODO implement favorites behavior
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showFavorites() {
-        showEmptyFavoritesView();
-    }
-
-    private void showEmptyFavoritesView() {
-        mFavoritesEmpty.setVisibility(View.VISIBLE);
-        mMovieRecyclerView.setVisibility(View.INVISIBLE);
-        isNoFavoritesVisible = true;
-    }
-
-    private void loadMovieData(URL url) {
-        showMoviesDataView();
-        new MoviesTask(url).execute();
     }
 
     private void showMoviesDataView() {
@@ -117,43 +122,60 @@ public class MainActivity extends AppCompatActivity
         mErrorMessage.setVisibility(View.INVISIBLE);
     }
 
-    public class MoviesTask extends AsyncTask<String, String, String> {
-        private URL url;
+    @SuppressLint("StaticFieldLeak")
+    @NonNull
+    @Override
+    public Loader<MovieList> onCreateLoader(int id, @Nullable Bundle args) {
+        return new AsyncTaskLoader<MovieList>(this) {
+            MovieList movies = null;
 
-        MoviesTask(URL url) {
-           this.url = url;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                return API.getResponseFromHttpUrl(url);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+            @Override
+            protected void onStartLoading() {
+                if (movies != null)
+                    deliverResult(movies);
+                else {
+                    mLoading.setVisibility(View.VISIBLE);
+                    forceLoad();
+                }
             }
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            mLoading.setVisibility(View.INVISIBLE);
-            MovieList movies;
-
-            try {
-                showMoviesDataView();
-                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-                movies = gson.fromJson(result, MovieList.class);
-                mMovieAdapter.setMovieData(movies.getResults());
-            } catch (Exception e) {
-                e.printStackTrace();
+            @Nullable
+            @Override
+            public MovieList loadInBackground() {
+                URL url = API.buildMoviesUrl(sortedBy);
+                try {
+                    String result = API
+                            .getResponseFromHttpUrl(url);
+                    Gson gson = new GsonBuilder().setDateFormat(RESPONSE_DATE_PATTERN).create();
+                    movies = gson.fromJson(result, MovieList.class);
+                    return movies;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
-        }
+
+            public void deliverResult(MovieList data) {
+                movies = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<MovieList> loader, MovieList data) {
+        mLoading.setVisibility(View.INVISIBLE);
+        mMovieAdapter.setMovieData(data.getResults());
+        showMoviesDataView();
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<MovieList> loader) {
+        // do nothing - not used
+    }
+
+    private void invalidateData() {
+        mMovieAdapter.setMovieData(null);
     }
 
     @Override
@@ -170,5 +192,12 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(EXTRA_RATING, movie.formatVoteAverage());
         intent.putExtra(EXTRA_OVERVIEW, movie.getOverview());
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        outState.putString(STATE_SORTED_BY, sortedBy);
     }
 }
