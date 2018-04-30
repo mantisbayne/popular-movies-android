@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     private static final String STATE_IS_FAVORITED = "is_favorited";
+
     @BindView(R.id.movie_details_title)
     TextView mTitle;
     @BindView(R.id.movie_details_release_date)

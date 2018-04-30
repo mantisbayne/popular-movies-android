@@ -8,8 +8,8 @@
     <string name="release_date">Release date</string>
     <string name="user_rating">User rating</string>
     <string name="favorite">Favorite</string>
-    <string name="reviews">Reviews : </string>
-    <string name="trailers">Trailers :</string>
+    <string name="reviews">Reviews</string>
+    <string name="trailers">Trailers</string>
 
     <!--No Favorites View-->
     <string name="no_favorites">No Favorites</string>
