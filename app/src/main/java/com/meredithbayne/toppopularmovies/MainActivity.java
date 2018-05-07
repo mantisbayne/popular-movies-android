@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     // TODO improve this for internationalization / localization
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT =
             new SimpleDateFormat(DATE_PATTERN, Locale.US);
+    private static final String EXTRA_MOVIE_ID = "movie_id";
 
     @BindView(R.id.movies_error)
     TextView mErrorMessage;
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity
         Movie movie = mMovieAdapter.getItem(position);
 
         intent.putExtra(EXTRA_MOVIE, movie);
+        intent.putExtra(EXTRA_MOVIE_ID, movie.getId());
         intent.putExtra(EXTRA_TITLE, movie.getOriginalTitle());
         intent.putExtra(EXTRA_POSTER, movie.getPosterPath());
         intent.putExtra(EXTRA_RELEASE_DATE, movie.formatDate(DISPLAY_DATE_FORMAT));

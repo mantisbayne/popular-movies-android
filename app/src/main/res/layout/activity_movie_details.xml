@@ -169,12 +169,18 @@
         <FrameLayout
             android:id="@+id/movie_trailers_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/movie_overview_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"/>
 
         <FrameLayout
             android:id="@+id/movie_reviews_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/movie_trailers_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -4,14 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.meredithbayne.toppopularmovies.view.ReviewAdapter;
 import com.meredithbayne.toppopularmovies.data.MovieContract;
 import com.meredithbayne.toppopularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
@@ -34,8 +33,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     ImageView mPoster;
     @BindView(R.id.favorite_movie_icon)
     ImageView mFavoriteIcon;
-    @BindView(R.id.reviews_list) RecyclerView mReviewsList;
-    ReviewAdapter mReviewAdapter;
 
     private Movie movie;
     private boolean isFavorite;
@@ -53,14 +50,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mFavoriteIcon.findViewById(R.id.favorite_movie_icon);
 
-        mReviewsList.setAdapter(mReviewAdapter);
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        movie = getIntent().getParcelableExtra(MainActivity.EXTRA_MOVIE);
+        ReviewsFragment reviewsFragment = new ReviewsFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.movie_reviews_container, reviewsFragment)
+                .commit();
 
-        if (savedInstanceState != null)
-            isFavorite = savedInstanceState.getBoolean(STATE_IS_FAVORITED, isFavorite);
-        else
-            isFavorite = isFavoriteMovie();
+        if (savedInstanceState == null)
+            movie = getIntent().getParcelableExtra(MainActivity.EXTRA_MOVIE);
 
         loadPoster();
         if (movie != null)

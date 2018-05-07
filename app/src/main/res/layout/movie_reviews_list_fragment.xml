@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/movie_reviews_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/reviews_list"
-        android:layout_marginTop="@dimen/large_margin"
-        android:gravity="center"
-        android:text="@string/reviews"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textStyle="italic" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reviews_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movie_reviews_header"
-        android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/large_margin"
         android:layout_marginTop="4dp" />
 
@@ -28,10 +15,9 @@
         android:id="@+id/end_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/reviews_list"
         android:layout_marginLeft="@dimen/large_margin"
         android:layout_marginRight="@dimen/large_margin"
         android:layout_marginTop="@dimen/medium_margin"
         android:background="@color/colorPrimary" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
